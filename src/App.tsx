@@ -154,7 +154,7 @@ class Timer {
       }
 
       this.setText(ins.getText())
-    }, 30)
+    }, 1000)
   }
 
   public stop(isAhead = false) {
