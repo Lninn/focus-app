@@ -1,6 +1,6 @@
 import './App.css'
 
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { DEFAULT_SOUND_KEY, DEFAULT_SOUND_SRC, getSoundSrc } from './sound'
 import { getInterval } from './state'
 import useLocalState from './useLocalState'
@@ -14,14 +14,18 @@ function App() {
   
   const [soundkey, setSoundkey] = useLocalState('sound', DEFAULT_SOUND_KEY)
 
-  const timerRef = useRef<Timer>(new Timer(
-    () => {
-      setIsRuning(false)
-    },
-    (t) => {
-      setText(t)
-    }
-  ))
+  const timerRef = useRef<Timer>()
+
+  useEffect(() => {
+    timerRef.current = new Timer(
+      () => {
+        setIsRuning(false)
+      },
+      (t) => {
+        setText(t)
+      }
+    )
+  }, [])
 
   function handleMinuteChange(m: number) {
     setMinute(m)
@@ -29,6 +33,8 @@ function App() {
 
   function handleStart() {
     const coreTimer = timerRef.current
+
+    if (!coreTimer) return
 
     if (isRuning) {
       coreTimer.stop(true)
@@ -40,11 +46,15 @@ function App() {
   }
 
   function handleSoundChange(e: React.ChangeEvent<HTMLSelectElement>) {
+    const coreTimer = timerRef.current
+
+    if (!coreTimer) return
+
     const key = e.target.value
     setSoundkey(key)
 
     const soundSrc = getSoundSrc(key)
-    timerRef.current.changeSound(soundSrc)
+    coreTimer.changeSound(soundSrc)
   }
 
   const actText = isRuning ? '计时中...(再次点击中断计时)' : '点击开始计时'
@@ -130,6 +140,11 @@ class Timer {
     this.setText = setText
 
     this.audio = new Audio(DEFAULT_SOUND_SRC)
+
+    // function onSoundLoad(ev: Event) {
+    //   console.log(ev);
+    // }
+    // this.audio.addEventListener('canplaythrough', onSoundLoad, false);
   }
 
   public start(minute: number) {
