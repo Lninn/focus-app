@@ -25,6 +25,8 @@
 .form-item {
   display: flex;
   gap: 8px;
+
+  margin: 12px;
 }
 
 .sub-label {

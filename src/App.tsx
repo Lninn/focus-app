@@ -1,12 +1,25 @@
 import './App.css'
 
 import { useRef, useState } from 'react'
+import clockCountDownSound from './assets/clock-countdown-bleeps.wav'
+import smoothVibeSound from './assets/smooth-vibe.mp3'
+
+
+const soundMap: Record<string, string> = {
+  clockCountDownSound,
+  smoothVibeSound
+}
+const defaultSoundKey = 'clockCountDownSound'
+const defaultSoundSrc = soundMap[defaultSoundKey]
+
 
 function App() {
 
   const [text, setText] = useState('00:00')
   const [minitue, setMinute] = useState(1)
   const [isRuning, setIsRuning] = useState(false)
+  
+  const [soundkey, setSoundkey] = useState(defaultSoundKey)
 
   const timerRef = useRef<Timer>(new Timer(
     () => {
@@ -29,10 +42,33 @@ function App() {
     setIsRuning(!isRuning)
   }
 
+  function handleSoundChange(e: React.ChangeEvent<HTMLSelectElement>) {
+    const key = e.target.value
+    setSoundkey(key)
+
+    timerRef.current.changeSound(
+      soundMap[key]
+    )
+  }
+
   const actText = isRuning ? '计时中...(再次点击中断计时)' : '点击开始计时'
 
   return (
     <div className="App">
+
+      <audio src={clockCountDownSound}></audio>
+
+      <div>
+        <label>{text}</label>
+      </div>
+
+      <div className='form-item'>
+        <label>音效：</label>
+        <select value={soundkey} onChange={handleSoundChange} disabled={isRuning}>
+          <option value='clockCountDownSound'>Clock CountDown</option>
+          <option value='smoothVibeSound'>Smooth Vibe</option>
+        </select>
+      </div>
      
      <div className='form-item'>
       <label>时间：</label>
@@ -48,9 +84,7 @@ function App() {
       <span className='sub-label'>分钟</span>
      </div>
 
-     <div>
-      <label>{text}</label>
-     </div>
+     
 
       <button onClick={handleStart}>{actText}</button>
     </div>
@@ -64,9 +98,13 @@ class Timer {
   private endFn: () => void
   private setText: (t: string) => void
 
+  private audio: HTMLAudioElement | null = null
+
   constructor(endFn: () => void, setText: (t: string) => void) {
     this.endFn = endFn
     this.setText = setText
+
+    this.audio = new Audio(defaultSoundSrc)
   }
 
   public start(minute: number) {
@@ -80,7 +118,7 @@ class Timer {
       }
 
       this.setText(ins.getText())
-    }, 100)
+    }, 30)
   }
 
   public stop() {
@@ -94,6 +132,14 @@ class Timer {
     this.endFn()
 
     this.setText('00:00')
+
+    this.audio?.play()
+  }
+
+  public changeSound(src: string) {
+    if (this.audio) {
+      this.audio.src = src
+    }
   }
 }
 
