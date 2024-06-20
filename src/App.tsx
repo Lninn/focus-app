@@ -1,19 +1,18 @@
 import './App.css'
 
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { DEFAULT_SOUND_KEY, DEFAULT_SOUND_SRC, getSoundSrc } from './sound'
-
-
-const FOCUS_APP_MINUTE_KEY = 'focus-app-minute'
+import { getInterval } from './state'
+import useLocalState from './useLocalState'
 
 
 function App() {
 
   const [text, setText] = useState('00:00')
-  const [minitue, setMinute] = useState(1)
+  const [minitue, setMinute] = useLocalState('minute', 1)
   const [isRuning, setIsRuning] = useState(false)
   
-  const [soundkey, setSoundkey] = useState(DEFAULT_SOUND_KEY)
+  const [soundkey, setSoundkey] = useLocalState('sound', DEFAULT_SOUND_KEY)
 
   const timerRef = useRef<Timer>(new Timer(
     () => {
@@ -24,18 +23,8 @@ function App() {
     }
   ))
 
-  useEffect(() => {
-    const cacheValue = window.localStorage.getItem(FOCUS_APP_MINUTE_KEY)
-    if (!cacheValue) {
-      //
-    } else {
-      setMinute(+cacheValue)
-    }
-  }, [])
-
   function handleMinuteChange(m: number) {
     setMinute(m)
-    localStorage.setItem(FOCUS_APP_MINUTE_KEY, m.toString())
   }
 
   function handleStart() {
@@ -144,6 +133,7 @@ class Timer {
   }
 
   public start(minute: number) {
+    const __interval = getInterval()
 
     const ins = new MinuteUpdater(minute)
     this.ins = ins
@@ -154,7 +144,7 @@ class Timer {
       }
 
       this.setText(ins.getText())
-    }, 1000)
+    }, __interval)
   }
 
   public stop(isAhead = false) {
