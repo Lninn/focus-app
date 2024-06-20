@@ -3,6 +3,7 @@ import './App.css'
 import { useEffect, useRef, useState } from 'react'
 import clockCountDownSound from './assets/clock-countdown-bleeps.wav'
 import smoothVibeSound from './assets/smooth-vibe.mp3'
+import { createBrowserRouter } from 'react-router-dom'
 
 
 const soundMap: Record<string, string> = {
@@ -12,6 +13,7 @@ const soundMap: Record<string, string> = {
 const DEFAULT_SOUND_KEY = 'smoothVibeSound'
 const DEFAULT_SOUND_SRC = soundMap[DEFAULT_SOUND_KEY]
 const FOCUS_APP_MINUTE_KEY = 'focus-app-minute'
+
 
 
 function App() {
@@ -129,7 +131,7 @@ function QuickOptions({
   disabled: boolean
 }) {
   return (
-    <div style={{ display: 'flex', gap: 4 }}>
+    <div className='quick-options'>
       <button disabled={disabled} onClick={() => setMinute(15)}>15分钟</button>
       <button disabled={disabled} onClick={() => setMinute(30)}>30分钟</button>
       <button disabled={disabled} onClick={() => setMinute(55)}>55分钟</button>
