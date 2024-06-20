@@ -3,6 +3,12 @@
   margin: 0 auto;
   padding: 2rem;
   font-size: 16px;
+  height: calc(100% - 4rem);
+}
+.main-layout {
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
 }
 
 input, select, button {
@@ -31,6 +37,9 @@ input, select, button {
 
   margin: 12px;
 }
+.form-item label {
+  white-space: nowrap;
+}
 
 .sub-label {
   font-size: 14px;
@@ -43,6 +52,10 @@ input, select, button {
 
 .footer {
   margin-top: 40px;
+
+  display: flex;
+  justify-content: center;
+  gap: 16px;
 }
 
 .countDownText {

@@ -87,25 +87,15 @@ function App() {
         onChange={e => handleMinuteChange(+e.target.value)}
       />
       <span className='sub-label'>分钟</span>
-     </div>
+    </div>
 
-     <div className='form-item'>
+    <div className='form-item'>
       <label>快捷选项：</label>
 
       <QuickOptions disabled={isRuning} setMinute={handleMinuteChange} />
-     </div>
+    </div>
 
       <button onClick={handleStart}>{actText}</button>
-
-      <div className='footer'>
-        <a target='_blank' href='https://dash.zeabur.com/projects'>
-          <span>部署</span>
-          <span style={{ display: 'inline-block', width: 4 }}></span>
-          <img className='logo' src='https://dash.zeabur.com/logo-with-text-dark.svg' />
-        </a>
-
-        <a target='_blank' href="https://github.com/Lninn/focus-app">源码</a>
-      </div>
     </div>
   )
 }

@@ -21,8 +21,8 @@ export default function Layout() {
   const { pathname } = useLocation()
   
   return (
-    <div>
-      <div>
+    <div className="main-layout">
+      <div className="main-header">
         <h1>Focus App</h1>
         <div className="navbar">
           {menus.map((menu) => {
@@ -41,6 +41,22 @@ export default function Layout() {
       <div className="main-content">
         <Outlet />
       </div>
+
+      <Footer />
+    </div>
+  )
+}
+
+function Footer() {
+  return (
+    <div className='footer'>
+      <a target='_blank' href='https://dash.zeabur.com/projects'>
+        <span>部署</span>
+        <span style={{ display: 'inline-block', width: 4 }}></span>
+        <img className='logo' src='https://dash.zeabur.com/logo-with-text-dark.svg' />
+      </a>
+
+      <a target='_blank' href="https://github.com/Lninn/focus-app">源码</a>
     </div>
   )
 }
