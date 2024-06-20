@@ -48,6 +48,8 @@ input, select, button {
 .countDownText {
   font-size: 32px;
   font-weight: 500;
+  margin-block-end: 16px;
+  text-align: center;
 }
 
 .navbar {

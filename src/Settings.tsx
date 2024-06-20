@@ -32,7 +32,7 @@ export default function Settings() {
     <div>
       <div className="form-item">
         <label>模式</label>
-        <select value={mode} onChange={e => setMode(e.target.value)}>
+        <select value={mode} onChange={e => handleModeChange(e)}>
           <option value="1">debug</option>
           <option value="2">正常</option>
         </select>
