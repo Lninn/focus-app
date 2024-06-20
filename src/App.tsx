@@ -9,8 +9,8 @@ const soundMap: Record<string, string> = {
   clockCountDownSound,
   smoothVibeSound
 }
-const defaultSoundKey = 'clockCountDownSound'
-const defaultSoundSrc = soundMap[defaultSoundKey]
+const DEFAULT_SOUND_KEY = 'smoothVibeSound'
+const DEFAULT_SOUND_SRC = soundMap[DEFAULT_SOUND_KEY]
 
 
 function App() {
@@ -19,7 +19,7 @@ function App() {
   const [minitue, setMinute] = useState(1)
   const [isRuning, setIsRuning] = useState(false)
   
-  const [soundkey, setSoundkey] = useState(defaultSoundKey)
+  const [soundkey, setSoundkey] = useState(DEFAULT_SOUND_KEY)
 
   const timerRef = useRef<Timer>(new Timer(
     () => {
@@ -34,7 +34,7 @@ function App() {
     const coreTimer = timerRef.current
 
     if (isRuning) {
-      coreTimer.stop()
+      coreTimer.stop(true)
     } else {
       coreTimer.start(minitue)
     }
@@ -78,15 +78,36 @@ function App() {
         min={1}
         max={99}
         step={1}
+        style={{ width: 120 }}
         value={minitue}
         onChange={e => setMinute(+e.target.value)}
       />
       <span className='sub-label'>分钟</span>
      </div>
 
-     
+     <div className='form-item'>
+      <label>快捷选项：</label>
+
+      <QuickOptions disabled={isRuning} setMinute={setMinute} />
+     </div>
 
       <button onClick={handleStart}>{actText}</button>
+    </div>
+  )
+}
+
+function QuickOptions({
+  setMinute,
+  disabled,
+}: {
+  setMinute: (m: number) => void
+  disabled: boolean
+}) {
+  return (
+    <div style={{ display: 'flex', gap: 4 }}>
+      <button disabled={disabled} onClick={() => setMinute(15)}>15分钟</button>
+      <button disabled={disabled} onClick={() => setMinute(30)}>30分钟</button>
+      <button disabled={disabled} onClick={() => setMinute(55)}>55分钟</button>
     </div>
   )
 }
@@ -104,7 +125,7 @@ class Timer {
     this.endFn = endFn
     this.setText = setText
 
-    this.audio = new Audio(defaultSoundSrc)
+    this.audio = new Audio(DEFAULT_SOUND_SRC)
   }
 
   public start(minute: number) {
@@ -121,7 +142,7 @@ class Timer {
     }, 30)
   }
 
-  public stop() {
+  public stop(isAhead = false) {
     if (this.id) {
       clearInterval(this.id)
       this.id = null
@@ -133,7 +154,9 @@ class Timer {
 
     this.setText('00:00')
 
-    this.audio?.play()
+    if (!isAhead) {
+      this.audio?.play()
+    }
   }
 
   public changeSound(src: string) {
