@@ -73,7 +73,7 @@ function App() {
 
       <audio src={clockCountDownSound}></audio>
 
-      <div>
+      <div className='countDownText'>
         <label>{text}</label>
       </div>
 
@@ -107,6 +107,16 @@ function App() {
      </div>
 
       <button onClick={handleStart}>{actText}</button>
+
+      <div className='footer'>
+        <a target='_blank' href='https://dash.zeabur.com/projects'>
+          <span>部署</span>
+          <span style={{ display: 'inline-block', width: 4 }}></span>
+          <img className='logo' src='https://dash.zeabur.com/logo-with-text-dark.svg' />
+        </a>
+
+        <a target='_blank' href="https://github.com/Lninn/focus-app">源码</a>
+      </div>
     </div>
   )
 }
