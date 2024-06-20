@@ -1,4 +1,10 @@
+import { soundTest } from "./sound"
+
 export default function Settings() {
+  function playSound() {
+    soundTest()
+  }
+  
   return (
     <div>
       <div className="form-item">
@@ -11,7 +17,7 @@ export default function Settings() {
 
       <div className="form-item">
         <label>声音测试</label>
-        <button>播放</button>
+        <button onClick={playSound}>播放</button>
       </div>
     </div>
   )

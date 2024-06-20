@@ -1,19 +1,10 @@
 import './App.css'
 
 import { useEffect, useRef, useState } from 'react'
-import clockCountDownSound from './assets/clock-countdown-bleeps.wav'
-import smoothVibeSound from './assets/smooth-vibe.mp3'
-import { createBrowserRouter } from 'react-router-dom'
+import { DEFAULT_SOUND_KEY, DEFAULT_SOUND_SRC, getSoundSrc } from './sound'
 
 
-const soundMap: Record<string, string> = {
-  clockCountDownSound,
-  smoothVibeSound
-}
-const DEFAULT_SOUND_KEY = 'smoothVibeSound'
-const DEFAULT_SOUND_SRC = soundMap[DEFAULT_SOUND_KEY]
 const FOCUS_APP_MINUTE_KEY = 'focus-app-minute'
-
 
 
 function App() {
@@ -63,17 +54,14 @@ function App() {
     const key = e.target.value
     setSoundkey(key)
 
-    timerRef.current.changeSound(
-      soundMap[key]
-    )
+    const soundSrc = getSoundSrc(key)
+    timerRef.current.changeSound(soundSrc)
   }
 
   const actText = isRuning ? '计时中...(再次点击中断计时)' : '点击开始计时'
 
   return (
     <div className="App">
-
-      <audio src={clockCountDownSound}></audio>
 
       <div className='countDownText'>
         <label>{text}</label>
