@@ -1,6 +1,6 @@
 import './App.css'
 
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import clockCountDownSound from './assets/clock-countdown-bleeps.wav'
 import smoothVibeSound from './assets/smooth-vibe.mp3'
 
@@ -11,6 +11,7 @@ const soundMap: Record<string, string> = {
 }
 const DEFAULT_SOUND_KEY = 'smoothVibeSound'
 const DEFAULT_SOUND_SRC = soundMap[DEFAULT_SOUND_KEY]
+const FOCUS_APP_MINUTE_KEY = 'focus-app-minute'
 
 
 function App() {
@@ -29,6 +30,20 @@ function App() {
       setText(t)
     }
   ))
+
+  useEffect(() => {
+    const cacheValue = window.localStorage.getItem(FOCUS_APP_MINUTE_KEY)
+    if (!cacheValue) {
+      //
+    } else {
+      setMinute(+cacheValue)
+    }
+  }, [])
+
+  function handleMinuteChange(m: number) {
+    setMinute(m)
+    localStorage.setItem(FOCUS_APP_MINUTE_KEY, m.toString())
+  }
 
   function handleStart() {
     const coreTimer = timerRef.current
@@ -80,7 +95,7 @@ function App() {
         step={1}
         style={{ width: 120 }}
         value={minitue}
-        onChange={e => setMinute(+e.target.value)}
+        onChange={e => handleMinuteChange(+e.target.value)}
       />
       <span className='sub-label'>分钟</span>
      </div>
@@ -88,7 +103,7 @@ function App() {
      <div className='form-item'>
       <label>快捷选项：</label>
 
-      <QuickOptions disabled={isRuning} setMinute={setMinute} />
+      <QuickOptions disabled={isRuning} setMinute={handleMinuteChange} />
      </div>
 
       <button onClick={handleStart}>{actText}</button>
