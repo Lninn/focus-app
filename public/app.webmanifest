@@ -1,0 +1,23 @@
+{
+  "name": "My First Application",
+  "short_name": "FirstApp",
+  "start_url": "/",
+  "display": "standalone",
+  "id": "demo-1",
+  "theme_color": "red",
+  "background_color": "blue",
+  "scope": "./",
+  "icons": [
+     {
+        "src": "https://cdn.glitch.me/248b0d2d-8ab9-4407-a073-136440ab3556/icon.png?v=1640879741758",
+        "type": "image/png",
+        "sizes": "512x512"
+     },
+     {
+        "src": "ihttps://cdn.glitch.me/248b0d2d-8ab9-4407-a073-136440ab3556/icon.png?v=1640879741758",
+        "type": "image/png",
+        "sizes": "512x512",
+        "purpose": "maskable"
+     }
+   ]
+}
