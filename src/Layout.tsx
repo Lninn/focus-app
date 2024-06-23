@@ -1,5 +1,6 @@
 import classnames from "classnames";
 import { Link, Outlet, useLocation, useMatch } from "react-router-dom";
+import PWAPrompt from 'react-ios-pwa-prompt'
 
 
 const menus = [
@@ -22,6 +23,7 @@ export default function Layout() {
   
   return (
     <div className="main-layout">
+      <PWAPrompt />
       <div className="main-header">
         <h1>Focus App</h1>
         <div className="navbar">
