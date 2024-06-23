@@ -7,6 +7,11 @@ import Layout from './Layout';
 import App from './App'
 import Settings from './Settings';
 
+navigator.serviceWorker.register("dummy-sw.js").catch(err => {
+  console.log('注册service worker失败 ', err)
+}).then(() => {
+  console.log('注册service worker成功')
+})
 
 const router = createBrowserRouter([
   {
