@@ -107,11 +107,24 @@ function QuickOptions({
   setMinute: (m: number) => void
   disabled: boolean
 }) {
+  const minuteOptions = [
+    15,
+    30,
+    45,
+    55,
+  ]
+
   return (
     <div className='quick-options'>
-      <button disabled={disabled} onClick={() => setMinute(15)}>15分钟</button>
-      <button disabled={disabled} onClick={() => setMinute(30)}>30分钟</button>
-      <button disabled={disabled} onClick={() => setMinute(55)}>55分钟</button>
+      {minuteOptions.map(minute => (
+        <button
+          key={minute}
+          disabled={disabled}
+          onClick={() => setMinute(minute)}
+        >
+        {minute + '分钟'}
+        </button>
+      ))}
     </div>
   )
 }
