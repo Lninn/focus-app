@@ -66,15 +66,6 @@ function App() {
       msg: 'hello from react'
     }
     myWorker.postMessage(payload)
-  }
-
-  function handleAdd1MTimer() {
-    const myWorker = new Worker('dummy-sw.js')
-    const payload = {
-      type: 'start',
-      msg: 'add a 1m timer'
-    }
-    myWorker.postMessage(payload)
     myWorker.onmessage = ev => {
       const data = ev.data
       console.log('debug ', data)
@@ -119,8 +110,7 @@ function App() {
 
       <button onClick={handleStart}>{actText}</button>
 
-      <button onClick={handleTestClick}>链接测试</button>
-      <button onClick={handleAdd1MTimer}>启动一个1分钟定时</button>
+      <button onClick={handleTestClick}>启动一个1分钟定时</button>
     </div>
   )
 }
