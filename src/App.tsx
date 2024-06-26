@@ -3,11 +3,26 @@ import './App.css'
 import { useRef, useState } from 'react'
 import { DEFAULT_SOUND_KEY, DEFAULT_SOUND_SRC } from './sound'
 import useLocalState from './useLocalState'
+import QuickOptions from './QuickOptions'
 
 // const log = console.log.bind(console)
 const log = (...args: any) => { }
 
+interface ITask {
+  name: string;
+  minute: number;
+}
+
 function App() {
+  return (
+    <div className='App'>
+      <Setup />
+      <WorkSpace />
+    </div>
+  )
+}
+
+function Setup() {
 
   const [text, setText] = useState('00:00')
   const [minitue, setMinute] = useLocalState('minute', 1)
@@ -16,6 +31,11 @@ function App() {
   const [soundkey, setSoundkey] = useLocalState('sound', DEFAULT_SOUND_KEY)
 
   const workerRef = useRef<Worker | null>(null);
+
+  const [taskName, setTaskName] = useState('');
+
+  const [taskList, setTaskList] = useState<ITask[]>([]);
+  const AddTask = (t: ITask) =>  setTaskList([...taskList, t])
 
   function handleMinuteChange(m: number) {
     setMinute(m)
@@ -75,10 +95,19 @@ function App() {
     setSoundkey(key)
   }
 
+  function handleAddTask() {
+    const task: ITask = {
+      name: taskName,
+      minute: minitue,
+    }
+
+    AddTask(task);
+  }
+
   const actText = isRuning ? '计时中...(再次点击中断计时)' : '点击开始计时'
 
   return (
-    <div className="App">
+    <div>
 
       <div className='countDownText'>
         <label>{text}</label>
@@ -114,36 +143,25 @@ function App() {
       </div>
 
       <button onClick={handleStart}>{actText}</button>
+
+      <div className='form-item'>
+        <label>任务名称：</label>
+        <input
+          value={taskName}
+          onChange={e => setTaskName(e.target.value)}
+          placeholder='任务名称'
+        />
+      </div>
+      <button onClick={handleAddTask}>提交</button>
+
+      <WorkSpace />
     </div>
   )
 }
 
-function QuickOptions({
-  setMinute,
-  disabled,
-}: {
-  setMinute: (m: number) => void
-  disabled: boolean
-}) {
-  const minuteOptions = [
-    15,
-    30,
-    45,
-    55,
-  ]
-
+function WorkSpace() {
   return (
-    <div className='quick-options'>
-      {minuteOptions.map(minute => (
-        <button
-          key={minute}
-          disabled={disabled}
-          onClick={() => setMinute(minute)}
-        >
-          {minute + '分钟'}
-        </button>
-      ))}
-    </div>
+    <div>123</div>
   )
 }
 
