@@ -11,7 +11,7 @@ function App() {
   const [text, setText] = useState('00:00')
   const [minitue, setMinute] = useLocalState('minute', 1)
   const [isRuning, setIsRuning] = useState(false)
-  
+
   const [soundkey, setSoundkey] = useLocalState('sound', DEFAULT_SOUND_KEY)
 
   const timerRef = useRef<Timer>()
@@ -59,6 +59,28 @@ function App() {
 
   const actText = isRuning ? '计时中...(再次点击中断计时)' : '点击开始计时'
 
+  function handleTestClick() {
+    const myWorker = new Worker('dummy-sw.js')
+    const payload = {
+      type: 'click',
+      msg: 'hello from react'
+    }
+    myWorker.postMessage(payload)
+  }
+
+  function handleAdd1MTimer() {
+    const myWorker = new Worker('dummy-sw.js')
+    const payload = {
+      type: 'start',
+      msg: 'add a 1m timer'
+    }
+    myWorker.postMessage(payload)
+    myWorker.onmessage = ev => {
+      const data = ev.data
+      console.log('debug ', data)
+    }
+  }
+
   return (
     <div className="App">
 
@@ -73,29 +95,32 @@ function App() {
           <option value='smoothVibeSound'>Smooth Vibe</option>
         </select>
       </div>
-     
-     <div className='form-item'>
-      <label>时间：</label>
-      <input
-        type='number'
-        disabled={isRuning}
-        min={1}
-        max={99}
-        step={1}
-        style={{ width: 120 }}
-        value={minitue}
-        onChange={e => handleMinuteChange(+e.target.value)}
-      />
-      <span className='sub-label'>分钟</span>
-    </div>
 
-    <div className='form-item'>
-      <label>快捷选项：</label>
+      <div className='form-item'>
+        <label>时间：</label>
+        <input
+          type='number'
+          disabled={isRuning}
+          min={1}
+          max={99}
+          step={1}
+          style={{ width: 120 }}
+          value={minitue}
+          onChange={e => handleMinuteChange(+e.target.value)}
+        />
+        <span className='sub-label'>分钟</span>
+      </div>
 
-      <QuickOptions disabled={isRuning} setMinute={handleMinuteChange} />
-    </div>
+      <div className='form-item'>
+        <label>快捷选项：</label>
+
+        <QuickOptions disabled={isRuning} setMinute={handleMinuteChange} />
+      </div>
 
       <button onClick={handleStart}>{actText}</button>
+
+      <button onClick={handleTestClick}>链接测试</button>
+      <button onClick={handleAdd1MTimer}>启动一个1分钟定时</button>
     </div>
   )
 }
@@ -122,7 +147,7 @@ function QuickOptions({
           disabled={disabled}
           onClick={() => setMinute(minute)}
         >
-        {minute + '分钟'}
+          {minute + '分钟'}
         </button>
       ))}
     </div>
