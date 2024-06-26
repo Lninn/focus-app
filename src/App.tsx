@@ -4,14 +4,10 @@ import { useRef, useState } from 'react'
 import { DEFAULT_SOUND_KEY, DEFAULT_SOUND_SRC } from './sound'
 import useLocalState from './useLocalState'
 import QuickOptions from './QuickOptions'
+import useAppStore, { type ITask } from './store/app'
 
 // const log = console.log.bind(console)
 const log = (...args: any) => { }
-
-interface ITask {
-  name: string;
-  minute: number;
-}
 
 function App() {
   return (
@@ -34,8 +30,7 @@ function Setup() {
 
   const [taskName, setTaskName] = useState('');
 
-  const [taskList, setTaskList] = useState<ITask[]>([]);
-  const AddTask = (t: ITask) =>  setTaskList([...taskList, t])
+  const { addTask } = useAppStore()
 
   function handleMinuteChange(m: number) {
     setMinute(m)
@@ -101,7 +96,7 @@ function Setup() {
       minute: minitue,
     }
 
-    AddTask(task);
+    addTask(task);
   }
 
   const actText = isRuning ? '计时中...(再次点击中断计时)' : '点击开始计时'
@@ -153,15 +148,25 @@ function Setup() {
         />
       </div>
       <button onClick={handleAddTask}>提交</button>
-
-      <WorkSpace />
     </div>
   )
 }
 
 function WorkSpace() {
+  const { taskList } = useAppStore()
   return (
-    <div>123</div>
+    <div>
+      <div>sub title area</div>
+      <div>
+        {taskList.map(taskItem => {
+          return (
+            <div key={taskItem.name}>
+              {taskItem.name}
+            </div>
+          )
+        })}
+      </div>
+    </div>
   )
 }
 
