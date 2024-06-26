@@ -55,6 +55,8 @@ function App() {
         setText(data.state.text)
       } else if (data.type === 'end') {
         playSound()
+        setText('00:00')
+        setIsRuning(false)
       } else if (data.type === 'break') {
         // do nothing
       }
