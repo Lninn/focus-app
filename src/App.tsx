@@ -1,17 +1,11 @@
 import './App.css'
 
-import { useEffect, useRef, useState } from 'react'
-import { DEFAULT_SOUND_KEY, DEFAULT_SOUND_SRC, getSoundSrc } from './sound'
-import { getInterval } from './state'
+import { useRef, useState } from 'react'
+import { DEFAULT_SOUND_KEY, DEFAULT_SOUND_SRC } from './sound'
 import useLocalState from './useLocalState'
 
 // const log = console.log.bind(console)
 const log = (...args: any) => { }
-
-function playSound() {
-  const raudio = new Audio(DEFAULT_SOUND_SRC)
-  raudio.play()
-}
 
 function App() {
 
@@ -28,6 +22,15 @@ function App() {
   }
 
   function handleStart() {
+    // https://stackoverflow.com/questions/31776548/why-cant-javascript-play-audio-files-on-iphone-safari
+
+    const soundEffect = new Audio();
+    soundEffect.autoplay = true;
+
+    // onClick of first interaction on page before I need the sounds
+    // (This is a tiny MP3 file that is silent and extremely short - retrieved from https://bigsoundbank.com and then modified)
+    soundEffect.src = "data:audio/mpeg;base64,SUQzBAAAAAABEVRYWFgAAAAtAAADY29tbWVudABCaWdTb3VuZEJhbmsuY29tIC8gTGFTb25vdGhlcXVlLm9yZwBURU5DAAAAHQAAA1N3aXRjaCBQbHVzIMKpIE5DSCBTb2Z0d2FyZQBUSVQyAAAABgAAAzIyMzUAVFNTRQAAAA8AAANMYXZmNTcuODMuMTAwAAAAAAAAAAAAAAD/80DEAAAAA0gAAAAATEFNRTMuMTAwVVVVVVVVVVVVVUxBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQsRbAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQMSkAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV";
+
     setIsRuning(!isRuning)
     if (isRuning) {
       const worker = workerRef.current
@@ -45,6 +48,7 @@ function App() {
       type: 'start',
       msg: 'start a timer by value filed.',
       minute: minitue,
+      // minute: 0.1,
     }
     myWorker.postMessage(payload)
 
@@ -54,7 +58,10 @@ function App() {
       if (data.type === 'interval') {
         setText(data.state.text)
       } else if (data.type === 'end') {
-        playSound()
+       
+        // later on when you actually want to play a sound at any point without user interaction
+        soundEffect.src = DEFAULT_SOUND_SRC;
+
         setText('00:00')
         setIsRuning(false)
       } else if (data.type === 'break') {

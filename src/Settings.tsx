@@ -21,6 +21,10 @@ export default function Settings() {
     soundTest()
   }
 
+  function playSoundAfter3s() {
+    setTimeout(soundTest, 3000)
+  }
+
   function handleModeChange(e: React.ChangeEvent<HTMLSelectElement>) {
     const val = e.target.value
     setMode(val)
@@ -40,7 +44,12 @@ export default function Settings() {
 
       <div className="form-item">
         <label>声音测试</label>
-        <button onClick={playSound}>播放</button>
+        <button onClick={playSound}>立即播放</button>
+      </div>
+
+      <div className="form-item">
+        <label>声音测试</label>
+        <button onClick={playSoundAfter3s}>3秒后播放</button>
       </div>
     </div>
   )
